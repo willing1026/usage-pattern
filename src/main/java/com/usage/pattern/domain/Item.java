@@ -2,6 +2,8 @@ package com.usage.pattern.domain;
 
 import lombok.Builder;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -13,6 +15,8 @@ public class Item {
     private String category;
     private LocalDate useStartDay;
     private LocalDate useFinishDay;
+    private BigDecimal price;
+    private BigDecimal amount;
 
     //사용일수 계산
     public int calculateDayCount() {
@@ -20,5 +24,20 @@ public class Item {
 
         Period period = useStartDay.until(finishDay);
         return period.getDays() + 1; // include endDay
+    }
+
+    //일별 사용금액 계산
+    public BigDecimal calculatePricePerDay() {
+        return divideWithUseDayCount(this.price);
+    }
+
+    //일별 사용수량 계산
+    public BigDecimal calculateAmountPerDay() {
+        return divideWithUseDayCount(this.amount);
+    }
+
+    private BigDecimal divideWithUseDayCount(BigDecimal target) {
+        int useDayCount = calculateDayCount();
+        return target.divide(new BigDecimal(useDayCount), 2, RoundingMode.HALF_UP);
     }
 }
