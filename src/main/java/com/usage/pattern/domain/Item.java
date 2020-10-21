@@ -31,6 +31,11 @@ public class Item {
         return divideWithUseDayCount(this.price);
     }
 
+    //용량별 사용일수
+    BigDecimal calculateUsageDayPerAmount() {
+        return new BigDecimal(calculateDayCount()).divide(this.amount, 2, RoundingMode.HALF_UP);
+    }
+
     //일별 사용수량 계산
     public BigDecimal calculateAmountPerDay() {
         return divideWithUseDayCount(this.amount);
@@ -39,5 +44,9 @@ public class Item {
     private BigDecimal divideWithUseDayCount(BigDecimal target) {
         int useDayCount = calculateDayCount();
         return target.divide(new BigDecimal(useDayCount), 2, RoundingMode.HALF_UP);
+    }
+
+    String getCategory() {
+        return category;
     }
 }
